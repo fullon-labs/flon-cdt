@@ -283,6 +283,12 @@ extern "C" {
    uint64_t  publication_time() {
       return intrinsics::get().call<intrinsics::publication_time>();
    }
+   bool get_recent_block_id( uint32_t block_num, capi_checksum256* block_id ) {
+      return intrinsics::get().call<intrinsics::get_recent_block_id>(block_num, block_id);
+   }
+   uint32_t get_last_irreversible_block_num() {
+      return intrinsics::get().call<intrinsics::get_last_irreversible_block_num>();
+   }
    uint32_t read_action_data( void* msg, uint32_t len ) {
       return intrinsics::get().call<intrinsics::read_action_data>(msg, len);
    }

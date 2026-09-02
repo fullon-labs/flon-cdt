@@ -85,6 +85,24 @@ __attribute__((eosio_wasm_import))
 uint32_t  get_block_num( void );
 
 /**
+ *  Returns the full ID of a recent completed block when it is still available
+ *  in the consensus block summary ring.
+ *
+ *  @param block_num - Block number to look up; must be less than the current block number
+ *  @param block_id - Receives the full block ID on success
+ *  @return true on success; false if the block is unavailable
+ */
+__attribute__((eosio_wasm_import))
+bool get_recent_block_id( uint32_t block_num, struct capi_checksum256* block_id );
+
+/**
+ *  Returns the consensus last irreversible block number carried by the current
+ *  block's parent state.
+ */
+__attribute__((eosio_wasm_import))
+uint32_t get_last_irreversible_block_num( void );
+
+/**
  * Check if specified protocol feature has been activated
  *
  * @param feature_digest - digest of the protocol feature

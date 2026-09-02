@@ -27,6 +27,12 @@ namespace eosio {
       __attribute__((eosio_wasm_import))
       uint32_t get_block_num();
 
+      __attribute__((eosio_wasm_import))
+      bool get_recent_block_id( uint32_t block_num, capi_checksum256* block_id );
+
+      __attribute__((eosio_wasm_import))
+      uint32_t get_last_irreversible_block_num();
+
     }
   }
 
@@ -89,6 +95,36 @@ namespace eosio {
    */
    inline block_num_t current_block_number() {
       return internal_use_do_not_use::get_block_num();
+   }
+
+   /**
+    * Returns the full ID of a recent completed block when it is still available
+    * in the consensus block summary ring.
+    *
+    * The current block, future blocks, block zero, and blocks overwritten in the
+    * 65,536-entry summary ring are unavailable.
+    *
+    * @param block_num - block number to look up
+    * @param block_id - receives the full block ID on success and is unchanged on failure
+    * @return true on success; false if the block is unavailable
+    */
+   inline bool get_recent_block_id( block_num_t block_num, checksum256& block_id ) {
+      internal_use_do_not_use::capi_checksum256 result{};
+      if ( !internal_use_do_not_use::get_recent_block_id(block_num, &result) ) {
+         return false;
+      }
+
+      block_id = checksum256{result.hash};
+      return true;
+   }
+
+   /**
+    * Returns the consensus last irreversible block number carried by the current
+    * block's parent state. The value is deterministic during production,
+    * validation, and replay.
+    */
+   inline block_num_t get_last_irreversible_block_num() {
+      return internal_use_do_not_use::get_last_irreversible_block_num();
    }
 
    /**

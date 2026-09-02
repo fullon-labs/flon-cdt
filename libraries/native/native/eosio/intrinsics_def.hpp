@@ -187,7 +187,9 @@ intrinsic_macro(bls_g2_map) \
 intrinsic_macro(bls_fp_mod) \
 intrinsic_macro(bls_fp_mul) \
 intrinsic_macro(bls_fp_exp) \
-intrinsic_macro(set_finalizers)
+intrinsic_macro(set_finalizers) \
+intrinsic_macro(get_recent_block_id) \
+intrinsic_macro(get_last_irreversible_block_num)
 
 #define CREATE_ENUM(name) \
    name,
