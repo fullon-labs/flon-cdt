@@ -20,6 +20,8 @@ namespace eosio {
      int64_t set_proposed_producers( char *producer_data, uint32_t producer_data_size );
      __attribute__((eosio_wasm_import))
      uint32_t get_active_producers(uint64_t*, uint32_t);
+     __attribute__((eosio_wasm_import))
+     int32_t get_producer_slot_stats(uint32_t, uint32_t, char*, uint32_t);
    }
 
    // producer_schedule.hpp
@@ -90,6 +92,23 @@ namespace eosio {
       std::vector<name> active_prods(prod_cnt);
       get_active_producers((uint64_t*)active_prods.data(), buffer_size);
       return active_prods;
+   }
+
+   std::vector<producer_slot_stats> get_producer_slot_stats(uint32_t from_slot,
+                                                            uint32_t to_slot) {
+      static_assert(sizeof(producer_slot_stats) == 32,
+                    "producer slot stats wire format changed");
+      const auto buffer_size = get_producer_slot_stats(from_slot, to_slot, nullptr, 0);
+      eosio::check(buffer_size >= 0, "failed to query producer slot statistics size");
+      eosio::check(buffer_size % sizeof(producer_slot_stats) == 0,
+                   "invalid producer slot statistics size");
+      std::vector<producer_slot_stats> result(buffer_size / sizeof(producer_slot_stats));
+      if (buffer_size > 0) {
+         const auto written = get_producer_slot_stats(
+            from_slot, to_slot, reinterpret_cast<char*>(result.data()), buffer_size);
+         eosio::check(written == buffer_size, "producer slot statistics result was truncated");
+      }
+      return result;
    }
 
    // powers.hpp

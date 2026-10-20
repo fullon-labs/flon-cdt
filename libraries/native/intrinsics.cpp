@@ -49,6 +49,11 @@ extern "C" {
    uint32_t get_active_producers( capi_name* producers, uint32_t datalen ) {
       return intrinsics::get().call<intrinsics::get_active_producers>(producers, datalen);
    }
+   int32_t get_producer_slot_stats(uint32_t from_slot, uint32_t to_slot,
+                                   char* stats, uint32_t datalen) {
+      return intrinsics::get().call<intrinsics::get_producer_slot_stats>(
+         from_slot, to_slot, stats, datalen);
+   }
    int32_t db_idx64_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const uint64_t* secondary) {
       return intrinsics::get().call<intrinsics::db_idx64_store>(scope, table, payer, id, secondary);
    }

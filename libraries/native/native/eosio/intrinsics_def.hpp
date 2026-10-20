@@ -56,6 +56,7 @@ intrinsic_macro(set_privileged) \
 intrinsic_macro(is_feature_activated) \
 intrinsic_macro(preactivate_feature) \
 intrinsic_macro(get_active_producers) \
+intrinsic_macro(get_producer_slot_stats) \
 intrinsic_macro(db_idx64_store) \
 intrinsic_macro(db_idx64_remove) \
 intrinsic_macro(db_idx64_update) \

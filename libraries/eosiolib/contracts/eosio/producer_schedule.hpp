@@ -170,4 +170,22 @@ namespace eosio {
     */
    std::vector<name> get_active_producers();
 
+   /**
+    * Return deterministic production statistics for the inclusive slot range.
+    * The range must be after the current chain head and must not extend beyond
+    * the pending block. Results are sorted by producer name.
+    */
+   struct producer_slot_stats {
+      name producer;
+      uint32_t expected;
+      uint32_t produced;
+      uint32_t missed;
+      uint32_t longest_missed_streak;
+      uint32_t leading_missed_streak;
+      uint32_t trailing_missed_streak;
+   };
+
+   std::vector<producer_slot_stats> get_producer_slot_stats(uint32_t from_slot,
+                                                            uint32_t to_slot);
+
 } /// namespace eosio
