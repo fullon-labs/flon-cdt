@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "../../core/eosio/check.hpp"
 #include "../../core/eosio/name.hpp"
 #include "../../core/eosio/crypto.hpp"
 
@@ -187,5 +188,24 @@ namespace eosio {
 
    std::vector<producer_slot_stats> get_producer_slot_stats(uint32_t from_slot,
                                                             uint32_t to_slot);
+
+   /** Monotonic chain-wide gas totals exposed after GAS_FEE_TOTALS activation. */
+   struct gas_fee_totals {
+      uint64_t total_gas_consumed;
+      uint64_t total_gas_value_flon;
+   };
+
+   namespace internal {
+      extern "C" __attribute__((eosio_wasm_import))
+      int32_t get_gas_fee_totals_intrinsic(char*, uint32_t) asm("get_gas_fee_totals");
+   }
+
+   inline gas_fee_totals get_gas_fee_totals() {
+      gas_fee_totals result{};
+      const auto written = internal::get_gas_fee_totals_intrinsic(
+         reinterpret_cast<char*>(&result), sizeof(result));
+      eosio::check(written == sizeof(result), "failed to read gas fee totals");
+      return result;
+   }
 
 } /// namespace eosio

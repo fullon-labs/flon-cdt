@@ -59,6 +59,14 @@ __attribute__((eosio_wasm_import))
 int32_t get_producer_slot_stats(uint32_t from_slot, uint32_t to_slot,
                                 char* stats, uint32_t datalen);
 
+typedef struct gas_fee_totals_v0 {
+   uint64_t total_gas_consumed;
+   uint64_t total_gas_value_flon;
+} gas_fee_totals_v0;
+
+__attribute__((eosio_wasm_import))
+int32_t get_gas_fee_totals(char* totals, uint32_t datalen);
+
 #ifdef __cplusplus
 }
 #endif
