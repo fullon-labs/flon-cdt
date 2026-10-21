@@ -54,6 +54,9 @@ extern "C" {
       return intrinsics::get().call<intrinsics::get_producer_slot_stats>(
          from_slot, to_slot, stats, datalen);
    }
+   int32_t get_gas_fee_totals(char* totals, uint32_t datalen) {
+      return intrinsics::get().call<intrinsics::get_gas_fee_totals>(totals, datalen);
+   }
    int32_t db_idx64_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const uint64_t* secondary) {
       return intrinsics::get().call<intrinsics::db_idx64_store>(scope, table, payer, id, secondary);
    }
