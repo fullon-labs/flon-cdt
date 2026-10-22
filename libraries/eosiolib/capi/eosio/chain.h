@@ -37,13 +37,14 @@ __attribute__((eosio_wasm_import))
 uint32_t get_active_producers( capi_name* producers, uint32_t datalen );
 
 /**
- * Deterministic per-producer statistics for a slot range after the current
- * chain head and no later than the pending block. Results are sorted by
- * producer name. Call with a null buffer and zero length to query the required
- * size, then call again with a sufficiently large buffer.
+ * Deterministic per-producer statistics for an inclusive slot range ending at
+ * the current committed chain head. The head slot is counted as produced by
+ * its validated producer; earlier slots without blocks are counted as missed.
+ * Results are sorted by producer name. Call with a null buffer and zero length
+ * to query the required size, then call again with a sufficiently large buffer.
  *
- * Long ranges may be queried in chunks. The leading and trailing streaks make
- * longest-missed-streak aggregation across chunk boundaries lossless.
+ * The leading and trailing streaks make longest-missed-streak aggregation
+ * across successive head-bounded calls lossless.
  */
 typedef struct producer_slot_stats_v0 {
    capi_name producer;

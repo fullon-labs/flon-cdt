@@ -173,8 +173,9 @@ namespace eosio {
 
    /**
     * Return deterministic production statistics for the inclusive slot range.
-    * The range must be after the current chain head and must not extend beyond
-    * the pending block. Results are sorted by producer name.
+    * The range must end at the current committed chain head. The head slot is
+    * counted as produced by its validated producer; earlier slots without
+    * blocks are counted as missed. Results are sorted by producer name.
     */
    struct producer_slot_stats {
       name producer;
