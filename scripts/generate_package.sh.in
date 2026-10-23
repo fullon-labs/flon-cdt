@@ -34,6 +34,40 @@ export DESC
 export URL
 export EMAIL
 
+validate_toolchain_version() {
+    local bin_dir="${BUILD_DIR%/}/bin"
+    local tool actual expected
+
+    for tool in cdt-cpp cdt-cc cdt-ld cdt-abidiff cdt-init; do
+        expected="${tool} version ${VERSION}"
+        actual=$("${bin_dir}/${tool}" --version) || {
+            echo "Error: unable to read ${tool} version"
+            return 1
+        }
+        if [[ "${actual}" != "${expected}" ]]; then
+            echo "Error: ${tool} version mismatch: expected '${expected}', got '${actual}'"
+            return 1
+        fi
+    done
+
+    local macros
+    macros=$("${bin_dir}/cdt-cpp" -dM -E -x c++ /dev/null) || {
+        echo "Error: unable to read CDT predefined version macros"
+        return 1
+    }
+    for expected in \
+        "#define __eosio_cdt_major__ @VERSION_MAJOR@" \
+        "#define __eosio_cdt_minor__ @VERSION_MINOR@" \
+        "#define __eosio_cdt_patchlevel__ @VERSION_PATCH@"; do
+        if ! grep -Fxq "${expected}" <<<"${macros}"; then
+            echo "Error: missing or incorrect compiler macro '${expected}'"
+            return 1
+        fi
+    done
+}
+
+validate_toolchain_version || exit 1
+
 mkdir -p tmp
 
 if [[ ${VARIANT} == "brew" ]]; then

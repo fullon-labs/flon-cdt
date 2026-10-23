@@ -27,6 +27,7 @@ else()
 endif()
 
 set(CDT_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME})
+set(CDT_TOOLS_BINARY_DIR "${CMAKE_BINARY_DIR}/tools-${VERSION_FULL}")
 
 option(ENABLE_NATIVE_COMPILER "enable native builds with the CDT toolchain" ON)
 option(ENABLE_TESTS "enable building tests" ON)

@@ -19,7 +19,7 @@ macro( cdt_clang_install_and_symlink file symlink )
 endmacro( cdt_clang_install_and_symlink )
 
 macro( cdt_tool_install file )
-   set(BINARY_DIR ${CMAKE_BINARY_DIR}/tools/bin)
+   set(BINARY_DIR ${CDT_TOOLS_BINARY_DIR}/bin)
    add_custom_command( TARGET CDTTools POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${BINARY_DIR}/${file} ${CMAKE_BINARY_DIR}/bin/ )
    install(FILES ${BINARY_DIR}/${file}
       DESTINATION ${CDT_INSTALL_PREFIX}/bin
@@ -27,7 +27,7 @@ macro( cdt_tool_install file )
 endmacro( cdt_tool_install )
 
 macro( cdt_tool_install_and_symlink file symlink )
-   set(BINARY_DIR ${CMAKE_BINARY_DIR}/tools/bin)
+   set(BINARY_DIR ${CDT_TOOLS_BINARY_DIR}/bin)
    add_custom_command( TARGET CDTTools POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${BINARY_DIR}/${file} ${CMAKE_BINARY_DIR}/bin/ )
    install(FILES ${BINARY_DIR}/${file}
       DESTINATION ${CDT_INSTALL_PREFIX}/bin
