@@ -16,8 +16,8 @@ set(PROJECT_NAME "flon.cdt")
 project(${PROJECT_NAME})
 
 set(VERSION_MAJOR 0)
-set(VERSION_MINOR 8)
-set(VERSION_PATCH 9)
+set(VERSION_MINOR 9)
+set(VERSION_PATCH 0)
 # set(VERSION_SUFFIX "alpha")
 
 if (VERSION_SUFFIX)
