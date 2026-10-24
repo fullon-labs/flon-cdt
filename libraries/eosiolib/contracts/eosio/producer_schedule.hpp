@@ -214,6 +214,45 @@ namespace eosio {
       return result;
    }
 
+   struct producer_slot_stats_v2 {
+      name producer;
+      uint32_t expected;
+      uint32_t produced;
+      uint32_t missed;
+      uint32_t idle_skipped;
+      uint32_t longest_missed_streak;
+      uint32_t leading_missed_streak;
+      uint32_t trailing_missed_streak;
+   };
+
+   namespace internal {
+      extern "C" __attribute__((eosio_wasm_import))
+      int32_t get_producer_slot_stats_v2_intrinsic(uint32_t, uint32_t, uint32_t,
+                                                   char*, uint32_t)
+         asm("get_producer_slot_stats_v2");
+   }
+
+   inline std::vector<producer_slot_stats_v2> get_producer_slot_stats_v2(
+         uint32_t previous_produced_slot, uint32_t from_slot, uint32_t to_slot) {
+      static_assert(sizeof(producer_slot_stats_v2) == 40,
+                    "producer slot stats v2 wire format changed");
+      const auto buffer_size = internal::get_producer_slot_stats_v2_intrinsic(
+         previous_produced_slot, from_slot, to_slot, nullptr, 0);
+      eosio::check(buffer_size >= 0, "failed to query producer slot statistics v2 size");
+      eosio::check(buffer_size % sizeof(producer_slot_stats_v2) == 0,
+                   "invalid producer slot statistics v2 size");
+      std::vector<producer_slot_stats_v2> result(
+         buffer_size / sizeof(producer_slot_stats_v2));
+      if (buffer_size > 0) {
+         const auto written = internal::get_producer_slot_stats_v2_intrinsic(
+            previous_produced_slot, from_slot, to_slot,
+            reinterpret_cast<char*>(result.data()), buffer_size);
+         eosio::check(written == buffer_size,
+                      "producer slot statistics v2 result was truncated");
+      }
+      return result;
+   }
+
    /** Monotonic chain-wide gas totals exposed after GAS_FEE_TOTALS activation. */
    struct gas_fee_totals {
       uint64_t total_gas_consumed;

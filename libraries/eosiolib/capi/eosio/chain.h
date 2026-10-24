@@ -60,6 +60,28 @@ __attribute__((eosio_wasm_import))
 int32_t get_producer_slot_stats(uint32_t from_slot, uint32_t to_slot,
                                 char* stats, uint32_t datalen);
 
+/**
+ * Elastic-block-aware slot statistics. `previous_produced_slot` is the last
+ * committed block slot immediately preceding the requested accounting range.
+ * Protocol-authorized idle skips are reported in `idle_skipped` and excluded
+ * from `expected`; therefore `expected == produced + missed`.
+ */
+typedef struct producer_slot_stats_v2 {
+   capi_name producer;
+   uint32_t expected;
+   uint32_t produced;
+   uint32_t missed;
+   uint32_t idle_skipped;
+   uint32_t longest_missed_streak;
+   uint32_t leading_missed_streak;
+   uint32_t trailing_missed_streak;
+} producer_slot_stats_v2;
+
+__attribute__((eosio_wasm_import))
+int32_t get_producer_slot_stats_v2(uint32_t previous_produced_slot,
+                                   uint32_t from_slot, uint32_t to_slot,
+                                   char* stats, uint32_t datalen);
+
 typedef struct gas_fee_totals_v0 {
    uint64_t total_gas_consumed;
    uint64_t total_gas_value_flon;

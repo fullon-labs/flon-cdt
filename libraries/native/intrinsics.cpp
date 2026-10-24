@@ -54,6 +54,12 @@ extern "C" {
       return intrinsics::get().call<intrinsics::get_producer_slot_stats>(
          from_slot, to_slot, stats, datalen);
    }
+   int32_t get_producer_slot_stats_v2(uint32_t previous_produced_slot,
+                                      uint32_t from_slot, uint32_t to_slot,
+                                      char* stats, uint32_t datalen) {
+      return intrinsics::get().call<intrinsics::get_producer_slot_stats_v2>(
+         previous_produced_slot, from_slot, to_slot, stats, datalen);
+   }
    int32_t get_gas_fee_totals(char* totals, uint32_t datalen) {
       return intrinsics::get().call<intrinsics::get_gas_fee_totals>(totals, datalen);
    }
